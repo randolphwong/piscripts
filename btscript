@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+import os
+import re
+
+mac_addr = raw_input("Please enter the mac address of the device you want to connect to: ")
+
+# Regular expression to match a mac address
+exp = r'[0-9A-Za-z]{2}(?:\:[0-9A-Za-z]{2}){5}'
+
+# Check whether the user has entered a valid mac address
+if (len(mac_addr) == 17 and re.findall(exp, mac_addr)):
+    print "Binding {} to device /dev/rfcomm10".format(mac_addr)
+    os.system("sudo rfcomm release /dev/rfcomm10")
+    os.system("sudo rfcomm bind /dev/rfcomm10 {} 1".format(mac_addr))
+    print "Done."
+else:
+    print "Invalid format. Eg.: 00:06:66:A0:B9:33"
+
