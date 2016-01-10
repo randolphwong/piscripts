@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# This is a script to make a Python startup_file start when the Raspberry Pi
+# boots up.
+# It adds a "@reboot python startup_file &" entry to the crontab
+
+echo -n "Enter the name of the Python file that you wish to run at start up: "
+read file_name
+
+# The Python startup_file to be executed at start up should be placed in the
+# for-startup directory.
+startup_path="/home/pi/Desktop/for-startup/"
+
+# Take the first instance of the startup_file that was found.
+startup_file=$(find $startup_path -name $file_name | sed -n 1p)
+
+if [[ ! -f $startup_file ]]; then
+    echo "File not found."
+    echo "Make sure that the file is in the for-startup folder in the desktop."
+    echo "Make sure that the name of the file entered is in full."
+    echo
+    echo "For example:"
+    echo
+    echo "Name of the file: helloworld.py"
+    echo "You should enter: helloworld.py"
+    exit -1
+fi
+
+echo "Adding $(basename $startup_file) to start up."
+
+# Remove any existing entries containing the word python from the crontab.
+tmp=$(mktemp)
+sudo crontab -l | sed '/python/d' > tmp
+echo "@reboot python $startup_file &" >> tmp
+sudo crontab < tmp
+rm -f tmp
+
+echo "Done."
+

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "Deleting Python scripts from start up."
+
+# Remove any entries in crontab that contains the word python.
+tmp=$(mktemp)
+sudo crontab -l | sed '/python/d' > tmp
+sudo crontab < tmp
+rm -f tmp
+
+echo "Done."
+
