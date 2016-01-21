@@ -31,3 +31,11 @@ How to use clearstartup:
 
 1. Follow step 1 to 5 of btscript (using clearstartup instead)
 
+gpiocleanup.py
+------------
+Clean up GPIOs by setting them as input.
+
+How to use gpiocleanup.py:
+
+1. Download and run the file with Python.
+
